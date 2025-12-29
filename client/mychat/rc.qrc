@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/duola.png</file>
+        <file>res/duola2.png</file>
+        <file>style/stylesheet.qss</file>
+    </qresource>
+</RCC>
