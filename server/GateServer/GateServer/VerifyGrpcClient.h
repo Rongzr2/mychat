@@ -11,6 +11,7 @@ using message::GetVarifyReq;
 using message::GetVarifyRsp;
 using message::VarifyService;
 
+// stub池, 用队列实现
 class RPConPool {
 public:
     RPConPool(size_t poolSize, std::string host, std::string port);
@@ -27,13 +28,13 @@ public:
     }
 
 private:
-    std::atomic<bool> b_stop_;
+    std::atomic<bool> b_stop_;  //标记是否关闭连接池
     size_t poolSize_;
     std::string host_;
     std::string port_;
     std::queue<std::unique_ptr<VarifyService::Stub>> connections_;
     std::mutex mutex_;
-    std::condition_variable cond_;
+    std::condition_variable cond_;  //在没有可用连接时让线程等待
 };
 
 class VerifyGrpcClient :public Singleton<VerifyGrpcClient>
@@ -46,7 +47,7 @@ public:
         GetVarifyRsp reply;
         GetVarifyReq request;
         request.set_email(email);
-        auto stub = pool_->getConnection();
+        auto stub = pool_->getConnection();     // Stub 让你“像调用本地函数一样”调用远程服务。
         Status status = stub->GetVarifyCode(&context, request, &reply);
 
         if (status.ok()) {

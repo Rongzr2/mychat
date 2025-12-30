@@ -18,6 +18,8 @@
 #include <mutex>
 #include <atomic>
 #include "ConfigMgr.h"
+#include "hiredis.h"
+#include <cstring>
 
 namespace beast = boost::beast;
 namespace http = beast::http;

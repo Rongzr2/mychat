@@ -1,6 +1,7 @@
 #include "VerifyGrpcClient.h"
 #include "ConfigMgr.h"
 
+// 启动时一次性创建好一批 Stub，后面反复用。
 RPConPool::RPConPool(size_t poolSize, std::string host, std::string port):
 	poolSize_(poolSize), host_(host), port_(port), b_stop_(false){
     for (size_t i = 0; i < poolSize_; ++i) {
@@ -29,10 +30,11 @@ std::unique_ptr<VarifyService::Stub> RPConPool::getConnection()
         }
         return !connections_.empty();
         });
-    //���ֹͣ��ֱ�ӷ��ؿ�ָ��
+    //如果池子要关闭了, 返回空指针
     if (b_stop_) {
         return  nullptr;
     }
+    // 从队头取一个stub
     auto context = std::move(connections_.front());
     connections_.pop();
     return context;
@@ -45,6 +47,7 @@ void RPConPool::returnConnection(std::unique_ptr<VarifyService::Stub> context)
         return;
     }
     connections_.push(std::move(context));
+    // 唤醒一个正在 getConnection() 里等待的线程
     cond_.notify_one();
 }
 

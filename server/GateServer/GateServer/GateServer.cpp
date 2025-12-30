@@ -3,8 +3,8 @@
 #include <json/value.h>
 #include <json/reader.h>
 #include "CServer.h"
-#include "hiredis.h"
 #include "ConfigMgr.h"
+#include "const.h"
 
 int main()
 {
