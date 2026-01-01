@@ -23,6 +23,20 @@ RedisCli.on("error", function (err) {
   RedisCli.quit();
 });
 
+// // 监听连接错误事件
+// RedisCli.on("error", function (err) {
+//   console.error("Redis connection error:", err);
+//   // 尝试重新连接
+//   RedisCli.connect();
+// });
+
+// 监听连接断开事件
+// RedisCli.on("end", function () {
+//   console.log("Redis connection closed");
+//   // 尝试重新连接
+//   RedisCli.connect();
+// });
+
 /**
  * 根据key获取Redis中存储的value
  * 这是一个异步函数，用于从Redis数据库中读取指定键的值

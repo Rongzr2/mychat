@@ -15,7 +15,7 @@ extern QString gate_url_prefix;
 
 enum ReqId{
     ID_GET_VERIFY_CODE = 1001,
-    ID_REQ_USER = 1002,
+    ID_REG_USER = 1002,
 };
 
 enum Modules{
